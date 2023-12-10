@@ -4,6 +4,9 @@ import by.gurinovich.travelcompanionsearch.util.enums.PostType;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.UUID;
 
 @Entity
@@ -23,6 +26,12 @@ public class Post {
     private String description;
 
     private String fee;
+
+    @Column(name = "date_there")
+    private LocalDate dateThere;
+
+    @Column(name = "date_back")
+    private LocalDate dateBack;
 
     @Enumerated(value = EnumType.STRING)
     @Column(name = "post_type")

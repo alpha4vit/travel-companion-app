@@ -24,6 +24,8 @@ create table if not exists posts(
                                     title varchar(100) not null ,
                                     description varchar(300),
                                     fee varchar(50),
+                                    date_there varchar(50),
+                                    date_back varchar(50),
                                     post_type varchar,
                                     user_id uuid references users(id) on delete cascade not null,
                                     transport_id bigint references transports(id) on delete cascade not null

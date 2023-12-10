@@ -11,7 +11,7 @@ spring:
     enabled: true
   security:
     jwt:
-      secret: ${JWT_SECRET}
+      secret: Zmpkc25mbXNkamZzbmRqd3JlZWUzMjRtZG1mZG1rbGZtc2YyM3JmZHM=
       access: 2592000000
       refresh: 2592000000
 
