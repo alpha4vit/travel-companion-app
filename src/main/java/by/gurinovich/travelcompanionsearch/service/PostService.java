@@ -7,6 +7,8 @@ import by.gurinovich.travelcompanionsearch.model.User;
 import by.gurinovich.travelcompanionsearch.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Example;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,6 +23,15 @@ public class PostService {
 
     public List<Post> getAll() {
         return postRepository.findAll();
+    }
+
+    public List<Post> getPage(Integer limit, Integer page){
+        Pageable pageable = PageRequest.of(page-1, limit);
+        return postRepository.findAll(pageable).getContent();
+    }
+
+    public Long getAllCount(){
+        return postRepository.count();
     }
 
     public Post save(Post entity) {
