@@ -10,9 +10,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @Transactional(readOnly = true)
@@ -23,7 +21,8 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
 
     public List<User> getAll(){
-        return userRepository.findAll();
+        List<User> users = userRepository.findAll();
+        return users;
     }
 
     public User getById(UUID id){
@@ -45,6 +44,15 @@ public class UserService {
         user.setRoles(new HashSet<>(List.of(Role.ROLE_USER)));
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         setRandomUUID(user);
+        return userRepository.save(user);
+    }
+
+
+    @Transactional
+    public User update(User user, UUID id) {
+        User before = getById(id);
+        user.setId(id);
+        user.setPassword(before.getPassword());
         return userRepository.save(user);
     }
 

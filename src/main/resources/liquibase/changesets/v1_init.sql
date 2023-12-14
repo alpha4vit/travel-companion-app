@@ -2,6 +2,8 @@ create table if not exists users(
                                     id uuid primary key not null,
                                     username varchar(100) not null unique,
                                     password varchar(100) not null,
+                                    bio varchar(500),
+                                    phone_number varchar(20),
                                     email varchar(50) not null unique
 );
 
