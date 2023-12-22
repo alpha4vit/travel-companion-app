@@ -1,11 +1,15 @@
 package by.gurinovich.travelcompanionsearch.controller;
 
 import by.gurinovich.travelcompanionsearch.dto.PostDTO;
+import by.gurinovich.travelcompanionsearch.dto.PostResponseDTO;
 import by.gurinovich.travelcompanionsearch.model.Post;
+import by.gurinovich.travelcompanionsearch.model.PostResponse;
 import by.gurinovich.travelcompanionsearch.response.ResponseBody;
+import by.gurinovich.travelcompanionsearch.service.PostResponseService;
 import by.gurinovich.travelcompanionsearch.service.PostService;
 import by.gurinovich.travelcompanionsearch.service.UserService;
 import by.gurinovich.travelcompanionsearch.util.mapper.impl.PostMapper;
+import by.gurinovich.travelcompanionsearch.util.mapper.impl.PostResponseMapper;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
@@ -25,9 +29,17 @@ public class PostController {
     private final PostService postService;
     private final PostMapper postMapper;
     private final UserService userService;
+    private final PostResponseMapper postResponseMapper;
+    private final PostResponseService postResponseService;
 
 
-    @GetMapping
+    @GetMapping("")
+    public ResponseEntity<List<PostDTO>> getAll(){
+        return ResponseEntity.ok()
+                .body(postMapper.toDTOs(postService.getAll()));
+    }
+
+    @GetMapping("/pages")
     public ResponseEntity<ResponseBody> getAll(
             @RequestParam("limit") Integer limit,
             @RequestParam("page") Integer page
@@ -46,7 +58,7 @@ public class PostController {
                 HttpStatus.OK);
     }
 
-    @GetMapping("/{user_id}")
+    @GetMapping("/user/{user_id}")
     public ResponseEntity<List<PostDTO>> getAllByUser(@PathVariable("user_id") UUID userId){
         return new ResponseEntity<>(
                 postMapper.toDTOs(userService.getById(userId).getPosts()),
@@ -65,5 +77,19 @@ public class PostController {
                 HttpStatus.OK
         );
     }
+
+
+    @PostMapping("/{post_id}/respond/{user_id}")
+    public ResponseEntity<PostResponseDTO> respondPost(@PathVariable("post_id") UUID postId,
+                                                       @PathVariable("user_id") UUID userId,
+                                                       @RequestBody PostResponseDTO postResponseDTO){
+        PostResponse postResponse = postResponseMapper.fromDTO(postResponseDTO);
+        postResponse.setPost(postService.getById(postId));
+        postResponse.setUser(userService.getById(userId));
+        postResponse = postResponseService.save(postResponse);
+        return ResponseEntity.ok()
+                .body(postResponseMapper.toDTO(postResponse));
+    }
+
 
 }

@@ -6,11 +6,17 @@ import by.gurinovich.travelcompanionsearch.model.User;
 import by.gurinovich.travelcompanionsearch.repository.UserRepository;
 import by.gurinovich.travelcompanionsearch.util.enums.Role;
 import lombok.RequiredArgsConstructor;
+import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.util.HashSet;
+import java.util.List;
+import java.util.UUID;
 
 @Service
 @Transactional(readOnly = true)
@@ -21,8 +27,7 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
 
     public List<User> getAll(){
-        List<User> users = userRepository.findAll();
-        return users;
+        return userRepository.findAll();
     }
 
     public User getById(UUID id){
@@ -61,5 +66,11 @@ public class UserService {
         while (userRepository.findById(uuid).isPresent())
             uuid = UUID.randomUUID();
         user.setId(uuid);
+    }
+
+    @Transactional
+    public void uploadAvatar(UUID userId, String avatar) {
+        User user = getById(userId);
+        user.setAvatar(avatar);
     }
 }

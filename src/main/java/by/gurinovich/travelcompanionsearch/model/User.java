@@ -29,8 +29,11 @@ public class User {
 
     private String bio;
 
+    private String avatar;
+
     @Column(name = "phone_number")
     private String phoneNumber;
+
 
     @Column(name = "role")
     @ElementCollection(fetch = FetchType.EAGER)
