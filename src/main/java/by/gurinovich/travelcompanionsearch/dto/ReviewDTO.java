@@ -9,7 +9,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ReviewDTO implements Serializable {
+public class ReviewDTO {
     private Long id;
     private String title;
     private String description;
