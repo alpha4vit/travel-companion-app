@@ -31,4 +31,6 @@ public class PostDTO {
 
     @JsonProperty(value = "transport_id")
     private Long transportId;
+
+    private UserDTO user;
 }

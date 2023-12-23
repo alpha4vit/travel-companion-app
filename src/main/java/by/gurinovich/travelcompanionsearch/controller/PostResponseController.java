@@ -11,7 +11,6 @@ import by.gurinovich.travelcompanionsearch.util.mapper.impl.PostResponseMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 import java.util.UUID;
 
