@@ -34,6 +34,12 @@ public class User {
     @Column(name = "phone_number")
     private String phoneNumber;
 
+    @Column(name = "is_email_verified")
+    private boolean isEmailVerified;
+
+    @Column(name = "confirmation_code")
+    private String confirmationCode;
+
 
     @Column(name = "role")
     @ElementCollection(fetch = FetchType.EAGER)

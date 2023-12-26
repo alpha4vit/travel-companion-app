@@ -13,6 +13,7 @@
     <version>0.0.1-SNAPSHOT</version>
     <name>TravelCompanionSearch</name>
     <description>TravelCompanionSearch</description>
+
     <properties>
         <java.version>17</java.version>
         <modelmapper.version>3.2.0</modelmapper.version>
@@ -20,7 +21,9 @@
         <maven.compiler.source>18</maven.compiler.source>
         <maven.compiler.target>18</maven.compiler.target>
         <minio.version>8.5.5</minio.version>
+        <mail.version>3.0.4</mail.version>
     </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -90,11 +93,10 @@
             <version>${minio.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.dropbox.core</groupId>
-            <artifactId>dropbox-core-sdk</artifactId>
-            <version>6.0.0</version>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-mail</artifactId>
+            <version>${mail.version}</version>
         </dependency>
-
     </dependencies>
 
     <build>

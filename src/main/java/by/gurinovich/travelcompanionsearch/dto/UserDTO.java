@@ -28,4 +28,10 @@ public class UserDTO {
 
     private String avatar;
 
+    @JsonProperty(value = "confirmation_code", access = JsonProperty.Access.READ_ONLY)
+    private String confirmationCode;
+
+    @JsonProperty(value = "is_email_verified", access = JsonProperty.Access.READ_ONLY)
+    private boolean isEmailVerified;
+
 }

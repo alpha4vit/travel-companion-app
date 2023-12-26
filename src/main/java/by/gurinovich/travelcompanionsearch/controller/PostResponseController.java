@@ -4,6 +4,7 @@ import by.gurinovich.travelcompanionsearch.dto.PostResponseDTO;
 import by.gurinovich.travelcompanionsearch.model.Post;
 import by.gurinovich.travelcompanionsearch.model.PostResponse;
 import by.gurinovich.travelcompanionsearch.model.User;
+import by.gurinovich.travelcompanionsearch.service.MailService;
 import by.gurinovich.travelcompanionsearch.service.PostResponseService;
 import by.gurinovich.travelcompanionsearch.service.PostService;
 import by.gurinovich.travelcompanionsearch.service.UserService;
@@ -23,6 +24,7 @@ public class PostResponseController {
     private final PostResponseMapper postResponseMapper;
     private final UserService userService;
     private final PostService postService;
+    private final MailService mailService;
 
     @GetMapping("/users/{user_id}")
     public ResponseEntity<List<PostResponseDTO>> getAllByUser(@PathVariable("user_id") UUID userId){
@@ -42,6 +44,7 @@ public class PostResponseController {
         postResponse.setUser(user);
         postResponse.setPost(post);
         postResponse = postResponseService.save(postResponse);
+        mailService.sendResponseMessage(post, postResponse);
         return ResponseEntity.ok(postResponseMapper.toDTO(postResponse));
     }
 }

@@ -39,6 +39,10 @@ public class PostService {
         return postRepository.save(entity);
     }
 
+    public Post update(Post post){
+        return postRepository.save(post);
+    }
+
     public Post getById(UUID id) {
         return postRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Post with this id not found!"));

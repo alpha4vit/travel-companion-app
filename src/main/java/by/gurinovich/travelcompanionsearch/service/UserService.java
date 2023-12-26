@@ -1,9 +1,11 @@
 package by.gurinovich.travelcompanionsearch.service;
 
 
+import by.gurinovich.travelcompanionsearch.dto.UserDTO;
 import by.gurinovich.travelcompanionsearch.exception.ResourceNotFoundException;
 import by.gurinovich.travelcompanionsearch.model.User;
 import by.gurinovich.travelcompanionsearch.repository.UserRepository;
+import by.gurinovich.travelcompanionsearch.util.RandomCodeGenerator;
 import by.gurinovich.travelcompanionsearch.util.enums.Role;
 import lombok.RequiredArgsConstructor;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
@@ -46,6 +48,7 @@ public class UserService {
             throw new IllegalArgumentException("User with this username already exists");
         if (userRepository.findByEmail(user.getEmail()).isPresent())
             throw new IllegalArgumentException("User with this email already exists");
+        user.setConfirmationCode(RandomCodeGenerator.generateFourNumberCode());
         user.setRoles(new HashSet<>(List.of(Role.ROLE_USER)));
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         setRandomUUID(user);
@@ -72,5 +75,10 @@ public class UserService {
     public void uploadAvatar(UUID userId, String avatar) {
         User user = getById(userId);
         user.setAvatar(avatar);
+    }
+
+    @Transactional
+    public void enable(UserDTO userDTO){
+        //User user = getB
     }
 }

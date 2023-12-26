@@ -39,10 +39,10 @@ public class AuthController{
         return new ResponseEntity<>(userMapper.toDTO(user), HttpStatus.CREATED);
     }
 
-//    @PostMapping("/enable")
-//    public ResponseEntity<Object> enableUser(@RequestBody UserDTO userDTO){
-//        userService.enable(userDTO.getEmail(), userDTO.getConfirmationCode());
-//        return new ResponseEntity<>(Boolean.TRUE, HttpStatus.OK);
-//    }
+    @PostMapping("/enable")
+    public ResponseEntity<Object> enableUser(@RequestBody UserDTO userDTO){
+        userService.enable(userDTO);
+        return new ResponseEntity<>(Boolean.TRUE, HttpStatus.OK);
+    }
 
 }

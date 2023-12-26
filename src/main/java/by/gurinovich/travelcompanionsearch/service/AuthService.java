@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class AuthService {
+public class  AuthService {
     private final AuthenticationManager authenticationManager;
     private final UserService userService;
     private final JWTTokenProvider jwtTokenProvider;

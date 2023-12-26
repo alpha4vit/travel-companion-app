@@ -5,7 +5,9 @@ create table if not exists users(
                                     bio varchar(500),
                                     phone_number varchar(20),
                                     email varchar(50) not null unique,
-                                    avatar varchar
+                                    avatar varchar,
+                                    confirmation_code varchar(5),
+                                    is_email_verified boolean default false
 );
 
 create table if not exists users_roles

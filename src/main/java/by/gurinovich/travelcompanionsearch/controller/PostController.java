@@ -91,5 +91,16 @@ public class PostController {
                 .body(postResponseMapper.toDTO(postResponse));
     }
 
+    @DeleteMapping("/{post_id}")
+    public HttpStatus deleteByPostId(@PathVariable("post_id") UUID postId){
+        postService.deleteById(postId);
+        return HttpStatus.OK;
+    }
+
+    @PatchMapping("/{post_id}")
+    public ResponseEntity<PostDTO> updatePost(@PathVariable("post_id") UUID postId, @RequestBody PostDTO postDTO){
+        Post post = postService.update(postMapper.fromDTO(postDTO));
+        return ResponseEntity.ok(postMapper.toDTO(post));
+    }
 
 }
