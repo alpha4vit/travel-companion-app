@@ -1,6 +1,7 @@
 package by.gurinovich.travelcompanionsearch.controller;
 
 import by.gurinovich.travelcompanionsearch.exception.ExceptionBody;
+import by.gurinovich.travelcompanionsearch.exception.InvalidRequestException;
 import by.gurinovich.travelcompanionsearch.exception.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -25,9 +26,9 @@ public class ControllerAdvice {
         return exceptionBody;
     }
 
-    @ExceptionHandler(IllegalArgumentException.class)
+    @ExceptionHandler(InvalidRequestException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ExceptionBody handleResourceNotFound(final IllegalArgumentException ex) {
+    public ExceptionBody handleResourceNotFound(final InvalidRequestException ex) {
         Map<String, String> errors = new HashMap<>();
         ExceptionBody exceptionBody = ExceptionBody.builder()
                 .message(ex.getMessage())
@@ -35,4 +36,5 @@ public class ControllerAdvice {
                 .build();
         return exceptionBody;
     }
+
 }

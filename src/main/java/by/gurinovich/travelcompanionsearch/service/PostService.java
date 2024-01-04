@@ -10,13 +10,18 @@ import org.springframework.data.domain.Example;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Instant;
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class PostService {
 
     private final PostRepository postRepository;
@@ -34,11 +39,14 @@ public class PostService {
         return postRepository.count();
     }
 
+    @Transactional
     public Post save(Post entity) {
         setRandomUUID(entity);
+        entity.setCreationDate(Instant.now());
         return postRepository.save(entity);
     }
 
+    @Transactional
     public Post update(Post post){
         return postRepository.save(post);
     }
@@ -48,6 +56,7 @@ public class PostService {
                 .orElseThrow(() -> new ResourceNotFoundException("Post with this id not found!"));
     }
 
+    @Transactional
     public void deleteById(UUID uuid) {
         postRepository.deleteById(uuid);
     }

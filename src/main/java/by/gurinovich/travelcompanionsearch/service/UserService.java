@@ -2,8 +2,10 @@ package by.gurinovich.travelcompanionsearch.service;
 
 
 import by.gurinovich.travelcompanionsearch.dto.UserDTO;
+import by.gurinovich.travelcompanionsearch.exception.InvalidRequestException;
 import by.gurinovich.travelcompanionsearch.exception.ResourceNotFoundException;
 import by.gurinovich.travelcompanionsearch.model.User;
+import by.gurinovich.travelcompanionsearch.props.UserProperties;
 import by.gurinovich.travelcompanionsearch.repository.UserRepository;
 import by.gurinovich.travelcompanionsearch.util.RandomCodeGenerator;
 import by.gurinovich.travelcompanionsearch.util.enums.Role;
@@ -27,6 +29,8 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final UserProperties userProperties;
+
 
     public List<User> getAll(){
         return userRepository.findAll();
@@ -51,6 +55,8 @@ public class UserService {
         user.setConfirmationCode(RandomCodeGenerator.generateFourNumberCode());
         user.setRoles(new HashSet<>(List.of(Role.ROLE_USER)));
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setAvatar(userProperties.getAvatarName());
+        user.setRating(0.0);
         setRandomUUID(user);
         return userRepository.save(user);
     }
@@ -64,12 +70,6 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    private void setRandomUUID(User user){
-        UUID uuid = UUID.randomUUID();
-        while (userRepository.findById(uuid).isPresent())
-            uuid = UUID.randomUUID();
-        user.setId(uuid);
-    }
 
     @Transactional
     public void uploadAvatar(UUID userId, String avatar) {
@@ -79,6 +79,17 @@ public class UserService {
 
     @Transactional
     public void enable(UserDTO userDTO){
-        //User user = getB
+        User user = getById(userDTO.getId());
+        if (!user.getConfirmationCode().equals(userDTO.getConfirmationCode()))
+            throw new InvalidRequestException("Invalid Confirmation code");
+        user.setEmailVerified(true);
+        user.setConfirmationCode(null);
+    }
+
+    private void setRandomUUID(User user){
+        UUID uuid = UUID.randomUUID();
+        while (userRepository.findById(uuid).isPresent())
+            uuid = UUID.randomUUID();
+        user.setId(uuid);
     }
 }

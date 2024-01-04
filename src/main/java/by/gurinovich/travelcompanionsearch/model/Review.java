@@ -3,6 +3,9 @@ package by.gurinovich.travelcompanionsearch.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.Instant;
+import java.time.LocalDate;
+
 @Entity
 @Table(name = "reviews")
 @Getter
@@ -26,4 +29,6 @@ public class Review {
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 
+    @Column(name = "creation_date")
+    private Instant creationDate;
 }

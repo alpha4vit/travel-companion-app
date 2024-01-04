@@ -1,5 +1,6 @@
 package by.gurinovich.travelcompanionsearch.service;
 
+import by.gurinovich.travelcompanionsearch.dto.UserDTO;
 import by.gurinovich.travelcompanionsearch.model.User;
 import by.gurinovich.travelcompanionsearch.security.JWTRequest;
 import by.gurinovich.travelcompanionsearch.security.JWTResponse;
@@ -30,6 +31,17 @@ public class  AuthService {
                 .refreshToken(jwtTokenProvider.createRefreshToken(user.getId(), user.getUsername()))
                 .build();
 
+    }
+
+    public JWTResponse register(User user){
+        User created = userService.save(user);
+        System.out.println(created);
+        return JWTResponse.builder()
+                .id(created.getId())
+                .username(created.getUsername())
+                .accessToken(jwtTokenProvider.createAccessToken(created.getId(), created.getUsername(), created.getRoles()))
+                .refreshToken(jwtTokenProvider.createRefreshToken(created.getId(), created.getUsername()))
+                .build();
     }
 
     public JWTResponse refresh(String token){

@@ -3,11 +3,11 @@ package by.gurinovich.travelcompanionsearch.model;
 import by.gurinovich.travelcompanionsearch.util.enums.PostType;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.cglib.core.Local;
 
+import java.time.Instant;
 import java.time.LocalDate;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.UUID;
+import java.util.*;
 
 @Entity
 @Table(name = "posts")
@@ -28,10 +28,10 @@ public class Post {
     private String fee;
 
     @Column(name = "date_there")
-    private LocalDate dateThere;
+    private Instant dateThere;
 
     @Column(name = "date_back")
-    private LocalDate dateBack;
+    private Instant dateBack;
 
     @Enumerated(value = EnumType.STRING)
     @Column(name = "post_type")
@@ -41,9 +41,10 @@ public class Post {
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 
-    @ManyToOne
-    @JoinColumn(name = "transport_id", referencedColumnName = "id")
-    private Transport transport;
+    @Column(name = "creation_date")
+    private Instant creationDate;
 
+    @OneToMany(mappedBy = "post")
+    private List<PostResponse> responses = new ArrayList<>();
 
 }

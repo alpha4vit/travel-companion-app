@@ -22,7 +22,10 @@ public class UserMapper implements Mappable<User, UserDTO> {
 
     @Override
     public UserDTO toDTO(User entity) {
-        return modelMapper.map(entity, UserDTO.class);
+        UserDTO dto = modelMapper.map(entity, UserDTO.class);
+        dto.setRating(Math.round(entity.getRating() *100.0)/100.0);
+        System.out.println(dto.getRating());
+        return dto;
     }
 
     @Override

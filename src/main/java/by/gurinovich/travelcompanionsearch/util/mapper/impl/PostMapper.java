@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
+import java.time.Instant;
 import java.util.Date;
 import java.util.List;
 
@@ -18,21 +19,21 @@ public class PostMapper implements Mappable<Post, PostDTO> {
 
     private final ModelMapper modelMapper;
     private final TransportService transportService;
+    private final UserMapper userMapper;
 
     @Override
     public Post fromDTO(PostDTO dto) {
         Post post = modelMapper.map(dto, Post.class);
-        post.setTransport(transportService.getById(dto.getTransportId()));
-        post.setDateBack(DateMapper.convertFromString(dto.getDateBack()));
-        post.setDateThere(DateMapper.convertFromString(dto.getDateThere()));
+        post.setDateBack(Instant.parse(dto.getDateBack()));
+        post.setDateThere(Instant.parse(dto.getDateThere()));
         return post;
     }
 
     @Override
     public PostDTO toDTO(Post entity) {
         PostDTO dto = modelMapper.map(entity, PostDTO.class);
-        dto.setDateBack(DateMapper.converToString(entity.getDateBack()));
-        dto.setDateThere(DateMapper.converToString(entity.getDateThere()));
+        dto.setUser(userMapper.toDTO(entity.getUser()));
+        dto.setResponsesCount(entity.getResponses().size());
         return dto;
     }
 

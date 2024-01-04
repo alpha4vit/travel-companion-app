@@ -2,12 +2,14 @@ package by.gurinovich.travelcompanionsearch.util.mapper.impl;
 
 import by.gurinovich.travelcompanionsearch.dto.ReviewDTO;
 import by.gurinovich.travelcompanionsearch.model.Review;
+import by.gurinovich.travelcompanionsearch.util.mapper.DateMapper;
 import by.gurinovich.travelcompanionsearch.util.mapper.Mappable;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 import org.springframework.ui.ModelMap;
 
+import java.time.Instant;
 import java.util.List;
 
 @Component
@@ -18,7 +20,10 @@ public class ReviewMapper implements Mappable<Review, ReviewDTO> {
 
     @Override
     public Review fromDTO(ReviewDTO dto) {
-        return modelMapper.map(dto, Review.class);
+        Review review = modelMapper.map(dto, Review.class);
+        if (review.getCreationDate() != null)
+            review.setCreationDate(Instant.parse(dto.getCreationDate()));
+        return review;
     }
 
     @Override

@@ -6,6 +6,7 @@ import by.gurinovich.travelcompanionsearch.model.User;
 import by.gurinovich.travelcompanionsearch.security.JWTRequest;
 import by.gurinovich.travelcompanionsearch.security.JWTResponse;
 import by.gurinovich.travelcompanionsearch.service.AuthService;
+import by.gurinovich.travelcompanionsearch.service.MailService;
 import by.gurinovich.travelcompanionsearch.service.UserService;
 import by.gurinovich.travelcompanionsearch.util.mapper.impl.UserMapper;
 import lombok.RequiredArgsConstructor;
@@ -22,11 +23,11 @@ public class AuthController{
     private final UserService userService;
     //private final UserDTOValidator userValidator;
     private final UserMapper userMapper;
-    //private final EmailService emailService;
+    private final MailService mailService;
 
     @PostMapping("/login")
-    public JWTResponse login(@RequestBody JWTRequest jwtRequest){
-        return authService.login(jwtRequest);
+    public ResponseEntity<JWTResponse> login(@RequestBody JWTRequest jwtRequest){
+        return ResponseEntity.ok(authService.login(jwtRequest));
     }
 
     @PostMapping("/register")
@@ -35,12 +36,13 @@ public class AuthController{
 //        checkBindingResult(bindingResult);
         User user = userMapper.fromDTO(userDTO);
         userService.save(user);
-        //emailService.sendEmailMessage(user, EmailType.REGISTRATION, new Properties());
-        return new ResponseEntity<>(userMapper.toDTO(user), HttpStatus.CREATED);
+        mailService.sendConfirmationCode(user);
+        return new ResponseEntity<>(user, HttpStatus.CREATED);
     }
 
     @PostMapping("/enable")
     public ResponseEntity<Object> enableUser(@RequestBody UserDTO userDTO){
+        System.out.println(userDTO);
         userService.enable(userDTO);
         return new ResponseEntity<>(Boolean.TRUE, HttpStatus.OK);
     }

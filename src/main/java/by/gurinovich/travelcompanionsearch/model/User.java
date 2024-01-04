@@ -16,6 +16,7 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class User {
 
     @Id
@@ -49,9 +50,12 @@ public class User {
     private Set<Role> roles = new HashSet<>();
 
     @OneToMany(mappedBy = "user")
-    private List<Transport> transports;
+    private List<Post> posts;
 
     @OneToMany(mappedBy = "user")
-    private List<Post> posts;
+    private List<Review> reviews;
+
+    @Column(name = "rating")
+    private Double rating;
 
 }

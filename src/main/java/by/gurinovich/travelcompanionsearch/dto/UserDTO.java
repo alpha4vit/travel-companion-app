@@ -10,6 +10,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@ToString
 public class UserDTO {
 
     private UUID id;
@@ -28,10 +29,12 @@ public class UserDTO {
 
     private String avatar;
 
-    @JsonProperty(value = "confirmation_code", access = JsonProperty.Access.READ_ONLY)
+    @JsonProperty(value = "confirmation_code")
     private String confirmationCode;
 
-    @JsonProperty(value = "is_email_verified", access = JsonProperty.Access.READ_ONLY)
+    @JsonProperty(value = "is_email_verified")
     private boolean isEmailVerified;
+
+    private Double rating;
 
 }

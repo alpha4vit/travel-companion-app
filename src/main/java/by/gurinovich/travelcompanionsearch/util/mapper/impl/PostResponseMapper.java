@@ -2,11 +2,13 @@ package by.gurinovich.travelcompanionsearch.util.mapper.impl;
 
 import by.gurinovich.travelcompanionsearch.dto.PostResponseDTO;
 import by.gurinovich.travelcompanionsearch.model.PostResponse;
+import by.gurinovich.travelcompanionsearch.util.mapper.DateMapper;
 import by.gurinovich.travelcompanionsearch.util.mapper.Mappable;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
+import java.time.Instant;
 import java.util.List;
 
 @Component
@@ -17,7 +19,10 @@ public class PostResponseMapper implements Mappable<PostResponse, PostResponseDT
 
     @Override
     public PostResponse fromDTO(PostResponseDTO dto) {
-        return modelMapper.map(dto, PostResponse.class);
+        PostResponse postResponse = modelMapper.map(dto, PostResponse.class);
+        if (postResponse.getCreationDate() != null)
+            postResponse.setCreationDate(Instant.parse(dto.getCreationDate()));
+        return postResponse;
     }
 
     @Override

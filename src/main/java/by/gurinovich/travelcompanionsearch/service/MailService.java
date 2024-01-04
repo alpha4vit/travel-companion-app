@@ -18,6 +18,7 @@ public class MailService {
     private final JavaMailSender mailSender;
     private final MailProperties mailProperties;
 
+
     @SneakyThrows
     public void sendResponseMessage(Post post, PostResponse postResponse){
         MimeMessage message = mailSender.createMimeMessage();
@@ -26,6 +27,17 @@ public class MailService {
         messageHelper.setTo(post.getUser().getEmail());
         messageHelper.setSubject(String.format("У вас новый отклик на объявление \" %s \" от пользователя %s", post.getTitle(), postResponse.getUser().getUsername()));
         messageHelper.setText("Comment: "+postResponse.getComment());
+        mailSender.send(message);
+    }
+
+    @SneakyThrows
+    public void sendConfirmationCode(User user){
+        MimeMessage message = mailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message, false, "UTF-8");
+        helper.setFrom(mailProperties.getUsername());
+        helper.setTo(user.getEmail());
+        helper.setSubject(String.format("Уважаемый, %s, ваш код подтверждения почты:", user.getUsername()));
+        helper.setText(user.getConfirmationCode());
         mailSender.send(message);
     }
 }

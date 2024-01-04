@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Instant;
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -27,7 +29,16 @@ public class ReviewService {
 
     @Transactional
     public Review save(Review review){
+        User user = review.getUser();
+        user.setRating(updateUserRating(user, review));
+        review.setCreationDate(Instant.now());
         return reviewRepository.save(review);
+    }
+
+    private Double updateUserRating(User user, Review review){
+        long reviewCount = user.getReviews().size();
+
+        return (((double)reviewCount*user.getRating()+review.getStars())/(reviewCount+1d));
     }
 
 }

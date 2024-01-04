@@ -4,6 +4,7 @@ package by.gurinovich.travelcompanionsearch.controller;
 import by.gurinovich.travelcompanionsearch.dto.ImageDTO;
 import by.gurinovich.travelcompanionsearch.dto.UserDTO;
 import by.gurinovich.travelcompanionsearch.model.User;
+import by.gurinovich.travelcompanionsearch.props.UserProperties;
 import by.gurinovich.travelcompanionsearch.service.ImageService;
 import by.gurinovich.travelcompanionsearch.service.UserService;
 import by.gurinovich.travelcompanionsearch.util.mapper.impl.ImageMapper;
@@ -23,6 +24,7 @@ public class UserContoller {
     private final UserMapper userMapper;
     private final ImageService imageService;
     private final ImageMapper imageMapper;
+    private final UserProperties userProperties;
 
     @GetMapping
     public ResponseEntity<Object> getAll(){
@@ -54,6 +56,9 @@ public class UserContoller {
     @PostMapping("/{user_id}/avatar")
     public ResponseEntity<Object> setUserAvatar(@PathVariable("user_id") UUID userId,
                                                 @RequestPart("avatar") MultipartFile avatar){
+        User user = userService.getById(userId);
+        if (!user.getAvatar().equals(userProperties.getAvatarName()))
+            imageService.removeImage(user.getAvatar());
         String saved = imageService.upload(imageMapper.fromDTO(new ImageDTO(avatar)));
         userService.uploadAvatar(userId, saved); 
         return ResponseEntity.ok()

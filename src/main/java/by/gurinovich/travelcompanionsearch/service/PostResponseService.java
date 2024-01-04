@@ -7,6 +7,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Instant;
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -21,6 +24,7 @@ public class PostResponseService {
 
     @Transactional
     public PostResponse save(PostResponse postResponse){
+        postResponse.setCreationDate(Instant.now());
         return postResponseRepository.save(postResponse);
     }
 

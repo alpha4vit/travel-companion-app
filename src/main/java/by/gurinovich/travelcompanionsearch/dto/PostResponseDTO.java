@@ -1,5 +1,6 @@
 package by.gurinovich.travelcompanionsearch.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 @Getter
@@ -12,4 +13,7 @@ public class PostResponseDTO {
     private String comment;
     private PostDTO post;
     private UserDTO user;
+
+    @JsonProperty(value = "creation_date", access = JsonProperty.Access.READ_ONLY)
+    private String creationDate;
 }
