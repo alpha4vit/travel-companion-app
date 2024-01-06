@@ -77,7 +77,6 @@ public class UserService {
 
     @Transactional
     public void updatePassword(User user, String password){
-        System.out.println(password);
         String encoded = passwordEncoder.encode(password);
         if (user.getPassword().equals(encoded))
             throw new InvalidRequestException("You can't use your previous password!");
