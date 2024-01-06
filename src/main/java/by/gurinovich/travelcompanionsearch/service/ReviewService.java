@@ -37,7 +37,6 @@ public class ReviewService {
 
     private Double updateUserRating(User user, Review review){
         long reviewCount = user.getReviews().size();
-
         return (((double)reviewCount*user.getRating()+review.getStars())/(reviewCount+1d));
     }
 

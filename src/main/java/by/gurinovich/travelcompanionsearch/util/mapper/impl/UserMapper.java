@@ -24,7 +24,6 @@ public class UserMapper implements Mappable<User, UserDTO> {
     public UserDTO toDTO(User entity) {
         UserDTO dto = modelMapper.map(entity, UserDTO.class);
         dto.setRating(Math.round(entity.getRating() *100.0)/100.0);
-        System.out.println(dto.getRating());
         return dto;
     }
 

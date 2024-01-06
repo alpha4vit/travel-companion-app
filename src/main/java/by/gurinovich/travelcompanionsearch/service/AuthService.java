@@ -35,7 +35,6 @@ public class  AuthService {
 
     public JWTResponse register(User user){
         User created = userService.save(user);
-        System.out.println(created);
         return JWTResponse.builder()
                 .id(created.getId())
                 .username(created.getUsername())

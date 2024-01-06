@@ -46,6 +46,8 @@ public class UserService {
                 .orElseThrow(() -> new ResourceNotFoundException("User with this username not found!"));
     }
 
+
+
     @Transactional
     public User save(User user){
         if (userRepository.findByUsername(user.getUsername()).isPresent())
@@ -80,8 +82,10 @@ public class UserService {
     @Transactional
     public void enable(UserDTO userDTO){
         User user = getById(userDTO.getId());
+        System.out.println(userDTO);
+        System.out.println(user);
         if (!user.getConfirmationCode().equals(userDTO.getConfirmationCode()))
-            throw new InvalidRequestException("Invalid Confirmation code");
+            throw new InvalidRequestException("Неверный код подтверждения!");
         user.setEmailVerified(true);
         user.setConfirmationCode(null);
     }
