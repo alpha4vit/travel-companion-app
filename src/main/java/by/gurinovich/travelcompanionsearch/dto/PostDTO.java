@@ -4,6 +4,8 @@ import by.gurinovich.travelcompanionsearch.util.enums.PostType;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.Column;
 import jakarta.persistence.Transient;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 
 import java.time.Instant;
@@ -18,8 +20,14 @@ import java.util.UUID;
 @ToString
 public class PostDTO {
     private UUID id;
+
+    @Size(min = 5, max = 50, message = "Длина заголовка должна быть от 5 до 50 символов")
     private String title;
+
+    @Size(max = 500, message = "Длина описания должна не превышать 500 символов")
     private String description;
+
+    @Size(max = 50, message = "Длина описания должна не превышать 50 символов")
     private String fee;
 
     @JsonProperty(value = "date_there")

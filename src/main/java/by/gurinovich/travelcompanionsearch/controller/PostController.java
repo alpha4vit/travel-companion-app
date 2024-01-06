@@ -10,12 +10,16 @@ import by.gurinovich.travelcompanionsearch.service.PostService;
 import by.gurinovich.travelcompanionsearch.service.UserService;
 import by.gurinovich.travelcompanionsearch.util.mapper.impl.PostMapper;
 import by.gurinovich.travelcompanionsearch.util.mapper.impl.PostResponseMapper;
+import by.gurinovich.travelcompanionsearch.util.validator.PostDTOValidator;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.naming.Binding;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,7 +35,7 @@ public class PostController {
     private final UserService userService;
     private final PostResponseMapper postResponseMapper;
     private final PostResponseService postResponseService;
-
+    private final PostDTOValidator postDTOValidator;
 
     @GetMapping("")
     public ResponseEntity<List<PostDTO>> getAll(){
@@ -68,7 +72,8 @@ public class PostController {
 
     @PostMapping("/{user_id}/create")
     public ResponseEntity<PostDTO> createPost(@PathVariable("user_id") UUID userId,
-                                                    @RequestBody PostDTO postDTO){
+                                              @RequestBody @Valid PostDTO postDTO, BindingResult bindingResult){
+        postDTOValidator.validate(postDTO, bindingResult);
         Post post = postMapper.fromDTO(postDTO);
         post.setUser(userService.getById(userId));
         post = postService.save(post);
