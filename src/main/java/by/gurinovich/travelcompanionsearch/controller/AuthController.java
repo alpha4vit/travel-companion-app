@@ -2,7 +2,6 @@ package by.gurinovich.travelcompanionsearch.controller;
 
 
 import by.gurinovich.travelcompanionsearch.dto.UserDTO;
-import by.gurinovich.travelcompanionsearch.exception.InvalidRequestException;
 import by.gurinovich.travelcompanionsearch.model.User;
 import by.gurinovich.travelcompanionsearch.security.JWTRequest;
 import by.gurinovich.travelcompanionsearch.security.JWTResponse;
@@ -17,6 +16,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -38,7 +39,7 @@ public class AuthController{
         userValidator.validate(userDTO, bindingResult);
         User user = userMapper.fromDTO(userDTO);
         userService.save(user);
-        mailService.sendConfirmationCode(user);
+        mailService.sendRegistrationEmailMessage(user);
         return new ResponseEntity<>(user, HttpStatus.CREATED);
     }
 
@@ -46,6 +47,29 @@ public class AuthController{
     public ResponseEntity<Object> enableUser(@RequestBody UserDTO userDTO){
         userService.enable(userDTO);
         return new ResponseEntity<>(Boolean.TRUE, HttpStatus.OK);
+    }
+
+    @GetMapping("/enable/{user_id}/resend")
+    @ResponseBody
+    public void resendConfirmationCode(@PathVariable("user_id") UUID userId){
+        User user = userService.getById(userId);
+        userService.updateConfirmationCode(user);
+        mailService.sendRegistrationEmailMessage(user);
+    }
+
+    @GetMapping("/reset")
+    public HttpStatus sendResetLetter(@RequestParam("email") String email){
+        User user = userService.getByEmail(email);
+        mailService.sendPasswordResetMessage(user);
+        return HttpStatus.OK;
+    }
+
+    @GetMapping("/reset/password")
+    public HttpStatus sendResetLetter(@RequestParam("id") UUID userId,
+            @RequestParam("password") String password){
+        User user = userService.getById(userId);
+        userService.updatePassword(user, password);
+        return HttpStatus.OK;
     }
 
 }

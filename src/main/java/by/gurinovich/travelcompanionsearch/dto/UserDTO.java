@@ -35,7 +35,7 @@ public class UserDTO {
 
     private String avatar;
 
-    @JsonProperty(value = "confirmation_code")
+    @JsonProperty(value = "confirmation_code", access = JsonProperty.Access.WRITE_ONLY)
     private String confirmationCode;
 
     @JsonProperty(value = "is_email_verified")

@@ -46,7 +46,10 @@ public class UserService {
                 .orElseThrow(() -> new ResourceNotFoundException("User with this username not found!"));
     }
 
-
+    public User getByEmail(String email){
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("User with this email not found!"));
+    }
 
     @Transactional
     public User save(User user){
@@ -72,6 +75,15 @@ public class UserService {
         return userRepository.save(user);
     }
 
+    @Transactional
+    public void updatePassword(User user, String password){
+        System.out.println(password);
+        String encoded = passwordEncoder.encode(password);
+        if (user.getPassword().equals(encoded))
+            throw new InvalidRequestException("You can't use your previous password!");
+        user.setPassword(encoded);
+    }
+
 
     @Transactional
     public void uploadAvatar(UUID userId, String avatar) {
@@ -82,13 +94,17 @@ public class UserService {
     @Transactional
     public void enable(UserDTO userDTO){
         User user = getById(userDTO.getId());
-        System.out.println(userDTO);
-        System.out.println(user);
         if (!user.getConfirmationCode().equals(userDTO.getConfirmationCode()))
-            throw new InvalidRequestException("Неверный код подтверждения!");
+            throw new InvalidRequestException("Invalid confirmation code!");
         user.setEmailVerified(true);
         user.setConfirmationCode(null);
     }
+
+    @Transactional
+    public void updateConfirmationCode(User user){
+        user.setConfirmationCode(RandomCodeGenerator.generateFourNumberCode());
+    }
+
 
     private void setRandomUUID(User user){
         UUID uuid = UUID.randomUUID();
