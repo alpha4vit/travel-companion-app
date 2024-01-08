@@ -24,7 +24,7 @@ public class PostDTO {
     @Size(min = 5, max = 50, message = "Длина заголовка должна быть от 5 до 50 символов")
     private String title;
 
-    @Size(max = 500, message = "Длина описания должна не превышать 500 символов")
+    @Size(max = 300, message = "Длина описания должна не превышать 300 символов")
     private String description;
 
     @Size(max = 50, message = "Длина описания должна не превышать 50 символов")

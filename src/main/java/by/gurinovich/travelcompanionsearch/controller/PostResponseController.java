@@ -9,8 +9,11 @@ import by.gurinovich.travelcompanionsearch.service.PostResponseService;
 import by.gurinovich.travelcompanionsearch.service.PostService;
 import by.gurinovich.travelcompanionsearch.service.UserService;
 import by.gurinovich.travelcompanionsearch.util.mapper.impl.PostResponseMapper;
+import by.gurinovich.travelcompanionsearch.util.validator.PostResponseDTOValidator;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.UUID;
@@ -25,6 +28,7 @@ public class PostResponseController {
     private final UserService userService;
     private final PostService postService;
     private final MailService mailService;
+    private final PostResponseDTOValidator postResponseDTOValidator;
 
     @GetMapping("/users/{user_id}")
     public ResponseEntity<List<PostResponseDTO>> getAllByUser(@PathVariable("user_id") UUID userId){
@@ -36,8 +40,9 @@ public class PostResponseController {
     @PostMapping("/users/{user_id}/{post_id}")
     public ResponseEntity<PostResponseDTO> respondPost(@PathVariable("user_id") UUID userId,
                                                        @PathVariable("post_id") UUID postId,
-                                                       @RequestBody PostResponseDTO postResponseDTO){
-
+                                                       @RequestBody @Valid PostResponseDTO postResponseDTO,
+                                                       BindingResult bindingResult){
+        postResponseDTOValidator.validate(postResponseDTO, bindingResult);
         User user = userService.getById(userId);
         Post post = postService.getById(postId);
         PostResponse postResponse = postResponseMapper.fromDTO(postResponseDTO);

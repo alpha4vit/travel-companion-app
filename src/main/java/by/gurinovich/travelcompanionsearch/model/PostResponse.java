@@ -20,6 +20,8 @@ public class PostResponse {
 
     private String comment;
 
+    private String contact;
+
     @ManyToOne
     @JoinColumn(name = "post_id", referencedColumnName = "id")
     private Post post;
