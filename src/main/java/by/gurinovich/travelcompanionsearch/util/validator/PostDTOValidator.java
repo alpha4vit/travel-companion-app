@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
+import java.time.Duration;
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
@@ -28,9 +29,9 @@ public class PostDTOValidator implements Validator{
         Map<String, String> map = new HashMap<>();
         if (Instant.parse(postDTO.getDateThere()).isAfter(Instant.parse(postDTO.getDateBack())))
             map.put("date", "Дата отправления не может быть позже даты прибытия!");
-        if (Instant.parse(postDTO.getDateThere()).isBefore(Instant.now()))
+        if (Instant.parse(postDTO.getDateThere()).isBefore(Instant.now().minus(Duration.ofDays(1))))
             map.put("date", "Дата отправления не может в прошлом!");
-        if (Instant.parse(postDTO.getDateBack()).isBefore(Instant.now()))
+        if (Instant.parse(postDTO.getDateBack()).isBefore(Instant.now().minus(Duration.ofDays(1))))
             if (map.containsKey("date"))
                 map.put("date", "Даты были введены некорректно!");
             else

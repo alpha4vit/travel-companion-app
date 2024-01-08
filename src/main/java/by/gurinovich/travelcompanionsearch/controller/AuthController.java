@@ -9,7 +9,7 @@ import by.gurinovich.travelcompanionsearch.service.AuthService;
 import by.gurinovich.travelcompanionsearch.service.MailService;
 import by.gurinovich.travelcompanionsearch.service.UserService;
 import by.gurinovich.travelcompanionsearch.util.mapper.impl.UserMapper;
-import by.gurinovich.travelcompanionsearch.util.validator.UserDTOValidator;
+import by.gurinovich.travelcompanionsearch.util.validator.UserDTOAuthValidator;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -25,7 +25,7 @@ import java.util.UUID;
 public class AuthController{
     private final AuthService authService;
     private final UserService userService;
-    private final UserDTOValidator userValidator;
+    private final UserDTOAuthValidator userValidator;
     private final UserMapper userMapper;
     private final MailService mailService;
 

@@ -9,8 +9,12 @@ import by.gurinovich.travelcompanionsearch.service.ImageService;
 import by.gurinovich.travelcompanionsearch.service.UserService;
 import by.gurinovich.travelcompanionsearch.util.mapper.impl.ImageMapper;
 import by.gurinovich.travelcompanionsearch.util.mapper.impl.UserMapper;
+import by.gurinovich.travelcompanionsearch.util.validator.UserDTOAuthValidator;
+import by.gurinovich.travelcompanionsearch.util.validator.UserDTOValidator;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import java.util.UUID;
@@ -25,6 +29,7 @@ public class UserContoller {
     private final ImageService imageService;
     private final ImageMapper imageMapper;
     private final UserProperties userProperties;
+    private final UserDTOValidator userDTOValidator;
 
     @GetMapping
     public ResponseEntity<Object> getAll(){
@@ -40,8 +45,9 @@ public class UserContoller {
 
     @PatchMapping("/{user_id}")
     public ResponseEntity<Object> updateUser(@PathVariable("user_id") UUID id,
-                                             @RequestBody UserDTO userDTO){
-
+                                             @RequestBody @Valid UserDTO userDTO, BindingResult bindingResult){
+        userDTO.setId(id);
+        userDTOValidator.validate(userDTO, bindingResult);
         User user = userService.update(userMapper.fromDTO(userDTO), id);
         return ResponseEntity.ok()
                 .body(userMapper.toDTO(user));

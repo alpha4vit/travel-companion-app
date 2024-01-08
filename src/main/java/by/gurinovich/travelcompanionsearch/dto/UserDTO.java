@@ -18,18 +18,20 @@ public class UserDTO {
 
     private UUID id;
 
-    @Size(min = 3, max = 50, message = "Должно быть от 3 до 50 символов")
+    @Size(min = 3, max = 50, message = "Должно быть от 3 до 50 символов!")
     private String username;
 
-    @Pattern(regexp = "^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$", message = "Электронная почта должна быть корректной")
+    @Pattern(regexp = "^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$", message = "Электронная почта должна быть корректной!")
     private String email;
 
+    @Pattern(regexp = "$|^\\+\\d{1,}$", message = "Номер телефона должен быть валидным!")
     @JsonProperty(value = "phone_number")
     private String phoneNumber;
 
+    @Size(max = 500, message = "Должно не превышать 500 символов!")
     private String bio;
 
-    @Size(min = 5, max = 50, message = "Должно быть от 5 до 50 символов")
+    @Size(min = 5, max = 50, message = "Должно быть от 5 до 50 символов!")
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
