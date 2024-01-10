@@ -28,7 +28,7 @@ public class ControllerAdvice {
 
     @ExceptionHandler(InvalidRequestException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ExceptionBody handleResourceNotFound(final InvalidRequestException ex) {
+    public ExceptionBody handleInvalidRequest(final InvalidRequestException ex) {
         ExceptionBody exceptionBody = ExceptionBody.builder()
                 .message(ex.getMessage())
                 .errors(ex.getErrors())
