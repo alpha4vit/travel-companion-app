@@ -105,7 +105,8 @@ public class PostController {
     }
 
     @PatchMapping("/{post_id}")
-    public ResponseEntity<PostDTO> updatePost(@PathVariable("post_id") UUID postId, @RequestBody PostDTO postDTO){
+    public ResponseEntity<PostDTO> updatePost(@PathVariable("post_id") UUID postId, @RequestBody @Valid PostDTO postDTO, BindingResult bindingResult){
+        postDTOValidator.validate(postDTO, bindingResult);
         Post post = postService.update(postMapper.fromDTO(postDTO));
         return ResponseEntity.ok(postMapper.toDTO(post));
     }

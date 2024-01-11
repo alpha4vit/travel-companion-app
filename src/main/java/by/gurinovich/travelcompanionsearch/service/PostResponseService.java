@@ -1,5 +1,6 @@
 package by.gurinovich.travelcompanionsearch.service;
 
+import by.gurinovich.travelcompanionsearch.exception.ResourceNotFoundException;
 import by.gurinovich.travelcompanionsearch.model.PostResponse;
 import by.gurinovich.travelcompanionsearch.model.User;
 import by.gurinovich.travelcompanionsearch.repository.PostResponseRepository;
@@ -22,10 +23,21 @@ public class PostResponseService {
         return postResponseRepository.findAllByUser(user);
     }
 
+    public PostResponse getById(Long id){
+        return postResponseRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Response with this id not found!"));
+    }
+
     @Transactional
     public PostResponse save(PostResponse postResponse){
         postResponse.setCreationDate(Instant.now());
         return postResponseRepository.save(postResponse);
+    }
+
+    @Transactional
+    public void deleteById(Long id){
+        getById(id);
+        postResponseRepository.deleteById(id);
     }
 
 }

@@ -12,6 +12,7 @@ import by.gurinovich.travelcompanionsearch.util.mapper.impl.PostResponseMapper;
 import by.gurinovich.travelcompanionsearch.util.validator.PostResponseDTOValidator;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -51,5 +52,11 @@ public class PostResponseController {
         postResponse = postResponseService.save(postResponse);
         mailService.sendResponseMessage(post, postResponse);
         return ResponseEntity.ok(postResponseMapper.toDTO(postResponse));
+    }
+
+    @DeleteMapping("/{response_id}")
+    public HttpStatus deleteById(@PathVariable("response_id") Long id){
+        postResponseService.deleteById(id);
+        return HttpStatus.OK;
     }
 }
