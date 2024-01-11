@@ -2,9 +2,12 @@ package by.gurinovich.travelcompanionsearch.service;
 
 import by.gurinovich.travelcompanionsearch.dto.PostDTO;
 import by.gurinovich.travelcompanionsearch.exception.ResourceNotFoundException;
+import by.gurinovich.travelcompanionsearch.model.Address;
 import by.gurinovich.travelcompanionsearch.model.Post;
 import by.gurinovich.travelcompanionsearch.model.User;
+import by.gurinovich.travelcompanionsearch.repository.AddressRepository;
 import by.gurinovich.travelcompanionsearch.repository.PostRepository;
+import by.gurinovich.travelcompanionsearch.repository.RouteRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.PageRequest;
@@ -25,6 +28,8 @@ import java.util.UUID;
 public class PostService {
 
     private final PostRepository postRepository;
+    private final AddressRepository addressRepository;
+    private final RouteRepository routeRepository;
 
     public List<Post> getAll() {
         return postRepository.findAll();
@@ -43,6 +48,9 @@ public class PostService {
     public Post save(Post entity) {
         setRandomUUID(entity);
         entity.setCreationDate(Instant.now());
+        addressRepository.save(entity.getRoute().getDeparture());
+        addressRepository.save(entity.getRoute().getDestination());
+        routeRepository.save(entity.getRoute());
         return postRepository.save(entity);
     }
 

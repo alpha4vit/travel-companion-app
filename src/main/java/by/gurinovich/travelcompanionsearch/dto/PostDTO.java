@@ -3,6 +3,7 @@ package by.gurinovich.travelcompanionsearch.dto;
 import by.gurinovich.travelcompanionsearch.util.enums.PostType;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.Column;
+import jakarta.persistence.Id;
 import jakarta.persistence.Transient;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Size;
@@ -40,6 +41,8 @@ public class PostDTO {
     private PostType postType;
 
     private UserDTO user;
+
+    private RouteDTO route;
 
     @JsonProperty(value = "creation_date", access = JsonProperty.Access.READ_ONLY)
     private String creationDate;

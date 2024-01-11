@@ -44,6 +44,10 @@ public class Post {
     @Column(name = "creation_date")
     private Instant creationDate;
 
+    @OneToOne(cascade = CascadeType.REMOVE)
+    @JoinColumn(name = "route_id", referencedColumnName = "id")
+    private Route route;
+
     @OneToMany(mappedBy = "post")
     private List<PostResponse> responses = new ArrayList<>();
 

@@ -11,6 +11,7 @@ import by.gurinovich.travelcompanionsearch.service.UserService;
 import by.gurinovich.travelcompanionsearch.util.mapper.impl.PostMapper;
 import by.gurinovich.travelcompanionsearch.util.mapper.impl.PostResponseMapper;
 import by.gurinovich.travelcompanionsearch.util.validator.PostDTOValidator;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.Response;
@@ -72,7 +73,8 @@ public class PostController {
 
     @PostMapping("/{user_id}/create")
     public ResponseEntity<PostDTO> createPost(@PathVariable("user_id") UUID userId,
-                                              @RequestBody @Valid PostDTO postDTO, BindingResult bindingResult){
+                                              @RequestBody @Valid PostDTO postDTO, BindingResult bindingResult, HttpServletRequest request){
+
         postDTOValidator.validate(postDTO, bindingResult);
         Post post = postMapper.fromDTO(postDTO);
         post.setUser(userService.getById(userId));
