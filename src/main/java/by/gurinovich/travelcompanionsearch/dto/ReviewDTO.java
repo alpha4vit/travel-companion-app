@@ -14,7 +14,7 @@ public class ReviewDTO {
     private Long id;
     private String title;
     private String description;
-    private Integer stars;
+    private Double stars;
     private UserDTO creator;
 
     @JsonProperty(value = "creation_date")

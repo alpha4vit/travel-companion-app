@@ -29,6 +29,8 @@ public class AuthController{
     private final UserMapper userMapper;
     private final MailService mailService;
 
+
+
     @PostMapping("/login")
     public ResponseEntity<JWTResponse> login(@RequestBody JWTRequest jwtRequest){
         return ResponseEntity.ok(authService.login(jwtRequest));

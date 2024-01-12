@@ -19,7 +19,7 @@ public class Review {
     private Long id;
     private String title;
     private String description;
-    private Integer stars;
+    private Double stars;
 
     @ManyToOne
     @JoinColumn(name = "creator_id", referencedColumnName = "id")

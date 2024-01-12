@@ -33,4 +33,9 @@ minio:
   secretKey: minioadmin
 user:
   avatarName: d8b5d0a738295345ebd8934b859fa1fca1c8c6ad.jpeg
+yandex:
+  geocoder:
+    key: ${GEOCODER_API_KEY}
+    url: https://geocode-maps.yandex.ru/1.x/?apikey=${GEOCODER_API_KEY}&geocode=
+    format: format=json
 

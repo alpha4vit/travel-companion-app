@@ -4,16 +4,21 @@ import by.gurinovich.travelcompanionsearch.dto.PostDTO;
 import by.gurinovich.travelcompanionsearch.exception.ResourceNotFoundException;
 import by.gurinovich.travelcompanionsearch.model.Address;
 import by.gurinovich.travelcompanionsearch.model.Post;
+import by.gurinovich.travelcompanionsearch.model.Route;
 import by.gurinovich.travelcompanionsearch.model.User;
+import by.gurinovich.travelcompanionsearch.props.GeocoderProperties;
 import by.gurinovich.travelcompanionsearch.repository.AddressRepository;
 import by.gurinovich.travelcompanionsearch.repository.PostRepository;
 import by.gurinovich.travelcompanionsearch.repository.RouteRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
 
 import java.time.Instant;
 import java.time.LocalDate;
@@ -30,6 +35,8 @@ public class PostService {
     private final PostRepository postRepository;
     private final AddressRepository addressRepository;
     private final RouteRepository routeRepository;
+    private final GeocoderService geocoderService;
+
 
     public List<Post> getAll() {
         return postRepository.findAll();
@@ -48,6 +55,7 @@ public class PostService {
     public Post save(Post entity) {
         setRandomUUID(entity);
         entity.setCreationDate(Instant.now());
+        updateRouteAddresses(entity.getRoute());
         addressRepository.save(entity.getRoute().getDeparture());
         addressRepository.save(entity.getRoute().getDestination());
         routeRepository.save(entity.getRoute());
@@ -56,6 +64,7 @@ public class PostService {
 
     @Transactional
     public Post update(Post post){
+        post.setCreationDate(Instant.now());
         return postRepository.save(post);
     }
 
@@ -75,4 +84,14 @@ public class PostService {
             uuid = UUID.randomUUID();
         post.setId(uuid);
     }
+
+    private void updateRouteAddresses(Route route){
+        updateAddress(route.getDeparture());
+        updateAddress(route.getDestination());
+    }
+
+    private void updateAddress(Address address){
+        address.setText(geocoderService.getAddressByCoordinates(address.getLongitude(), address.getLatitude()));
+    }
+
 }
