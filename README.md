@@ -22,7 +22,6 @@ Create API for web-application which allows user to create publication about tri
 11. **No Spring Data JPA**
 
 ## Required functionality
-Application must:
 1. **User can register in application with email verification, update his profile and personal information**
 2. **User can create publication about upcoming voyage or trip with additional details**
 3. **User can choose his route using map, so route coordinates must be stored**
